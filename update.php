@@ -3,6 +3,8 @@ include_once "session.php" ;
 include "handel.errors.php" ;
 include "db.php" ;
 include "valdtion.php" ;
+   include_once "uplodeImg.php" ;
+
 $connection = connect::getConnection() ;
 $vald = new valdtion ;
 if($vald->update()){
@@ -15,7 +17,22 @@ if($vald->update()){
         header("Location: edit.php?user={$_POST["id"]}&error=user_not_found") ;
         exit() ;
     }
-       
+     
+    if(isset($_FILES["img"]) && $_FILES["img"]["error"] == 0){
+        $file = new Files ;
+        $img = $file->upload($_FILES["img"]) ;
+        if(! $img){
+            $error = "Failed to upload profile picture.";
+            $_SESSION["errors"]["img"] = $error ;
+            header("Location: edit.php?user={$_POST["id"]}");
+            exit;
+        }
+        // delete old image
+        if(file_exists($user["img"])){
+            unlink($user["img"]) ;
+        }
+        
+    }
     
     // save data to file
     $data = [
@@ -28,9 +45,10 @@ if($vald->update()){
         "department" => $_POST["department"],
         "password" => password_hash($_POST["password"], PASSWORD_DEFAULT),
         "skills" =>  implode("_" , $_POST["skills"]),
-        "id" => $id
+        "img" => $img ?? $user["img"],
+        "id" => $id 
     ];
-    $stmt = $connection->prepare("update users set f_name = ? , l_name = ? , address = ? , country = ?, gender = ?, username = ?, department = ?, password = ?, skills = ? where id = ?") ;
+    $stmt = $connection->prepare("update users set f_name = ? , l_name = ? , address = ? , country = ?, gender = ?, username = ?, department = ?, password = ?, skills = ? , img = ? where id = ?") ;
     $stmt->execute(array_values($data));
     
     header("Location: users.view.php#updated") ;

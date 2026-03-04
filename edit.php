@@ -126,18 +126,38 @@
                 </div>" ;
     }
     ?>
-    <form action="update.php" method="post">
+    <form action="update.php" method="post" enctype="multipart/form-data">
          
         <input type="hidden" name="id" value="<?php echo $id ?>">
         <label>First Name</label>
         <input required type="text" name="f_name" value="<?php echo $user['f_name'] ?>">
+        <div class="error">
+            <?php
+            if(isset($_SESSION["errors"]["f_name"])){
+                echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["f_name"]}</p>" ;
+            }
+            ?>
+        </div> 
+
 
         <label>Last Name</label>
         <input type="text" name="l_name" value="<?php echo $user['l_name'] ?>">
-
+        <div class="error">
+            <?php
+            if(isset($_SESSION["errors"]["l_name"])){
+                echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["l_name"]}</p>" ;
+            }
+            ?>
+        </div>
         <label>Address</label>
         <textarea required name="address" rows="3"><?php echo $user['address'] ?></textarea>
-
+            <div class="error">
+                <?php
+                if(isset($_SESSION["errors"]["address"])){
+                    echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["address"]}</p>" ;
+                }
+                ?>
+            </div>
         <label>Country</label>
         <select name="country">
             <option value="">Select Country</option>
@@ -146,12 +166,25 @@
             <option value="UK" <?php echo $user['country'] == "UK" ? "selected" : "" ?>>UK</option>
             <option value="Germany" <?php echo $user['country'] == "Germany" ? "selected" : "" ?>>Germany</option>
         </select>
-
+            <div class="error">
+                <?php
+                if(isset($_SESSION["errors"]["country"])){
+                    echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["country"]}</p>" ;
+                }
+                ?>  
+            </div>
         <label>Gender</label>
         <div class="radio-group">
             <input type="radio" name="gender" value="male" <?php echo $user['gender'] == "male" ? "checked" : "" ?>> Male
             <input type="radio" name="gender" value="female" <?php echo $user['gender'] == "female" ? "checked" : "" ?>> Female
         </div>
+            <div class="error">
+                <?php
+                if(isset($_SESSION["errors"]["gender"])){
+                    echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["gender"]}</p>" ;
+                }
+                ?>
+            </div>
 
         <label>Skills</label>
         <div class="checkbox-group">
@@ -161,17 +194,65 @@
             <input type="checkbox" name="skills[]" value="php" <?php echo strpos($user['skills'], "php")  ? "checked" : "" ?>> PHP
             <input type="checkbox" name="skills[]" value="ruby" <?php echo strpos($user['skills'], "ruby")  ? "checked" : "" ?>> Ruby
         </div>
+        <div class="error">
+            <?php
+            if(isset($_SESSION["errors"]["skills"])){
+                echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["skills"]}</p>" ;
+            }
+            ?>
+        </div>
 
         <label>Username</label>
         <input type="text" name="username" value="<?php echo $user['username'] ?>">
-
+        <div class="error">
+            <?php
+            if(isset($_SESSION["errors"]["username"])){
+                echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["username"]}</p>" ;
+            }
+            ?>
+        </div>
      
         <label>Password</label>
         <input type="password" name="password">
+        <div class="error">
+            <?php
+            if(isset($_SESSION["errors"]["password"])){
+                echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["password"]}</p>" ;
+            }
+            ?>
+        </div>
 
         <label>Department</label>
         <input type="text" value="<?php echo $user['department'] ?>" name="department" readonly >
+        <div class="error">
+            <?php
+            if(isset($_SESSION["errors"]["department"])){
+                echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["department"]}</p>" ;
+            }
+            ?>
+        </div>
 
+         <div>
+            <label class="block font-semibold mb-2">Profile Picture</label>
+            
+            <input 
+                type="file" 
+                name="img"
+                class="w-full p-2 border rounded-lg bg-gray-50 
+                    file:mr-4 file:py-2 file:px-4 
+                    file:rounded-lg file:border-0 
+                    file:text-sm file:font-semibold 
+                    file:bg-emerald-500 file:text-white 
+                    hover:file:bg-emerald-600"
+            >
+        </div>
+            <div class="error">
+                <?php
+                if(isset($_SESSION["errors"]["img"])){
+                    echo "<p style='color: red; font-size: 0.9em;'>{$_SESSION["errors"]["img"]}</p>" ;
+                }
+                ?>
+            </div>
         <div class="buttons">
          
             <input type="submit" value="Submit">
@@ -181,4 +262,4 @@
 </div>
 
 </body>
-</html>
+</html> 
